@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+ 
+  darkMode: 'class',
   content: [
-    // paths to all of the files that might contain Tailwind classes
-    "./index.html",
+  
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   colors: {
