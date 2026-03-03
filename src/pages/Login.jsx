@@ -15,7 +15,7 @@ export default function Login() {
   };
 
   return (
-    <div className="noise min-h-screen flex flex-col lg:flex-row relative overflow-hidden bg-[#080d14]">
+    <div className="noise min-h-screen flex flex-col lg:flex-row relative overflow-hidden bg-[#080d14] page-enter">
 
       {/* Background glow effects */}
       <div className="absolute bottom-[-100px] right-[-50px] w-[400px] h-[400px] lg:w-[600px] lg:h-[600px] bg-orange-500 rounded-full blur-[130px] pointer-events-none" style={{ opacity: 0.55 }} />

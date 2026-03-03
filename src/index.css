@@ -37,3 +37,41 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #09a589;
 }
+
+/* 1. THE KEYFRAMES 
+  Using a slight scale (0.98) and a smaller travel distance (8px) 
+  creates a more sophisticated 'float' effect.
+*/
+@keyframes premiumReveal {
+  0% { 
+    opacity: 0; 
+    transform: translateY(8px) scale(0.98); 
+    filter: blur(4px); /* Optional: adds a soft lens focus effect */
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* 2. THE PAGE WRAPPER 
+  The 'cubic-bezier' here mimics physics—fast start, very smooth finish.
+*/
+.page-enter {
+  animation: premiumReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* 3. THE STAGGERED CHILDREN 
+  Instead of hard-coding 1, 2, 3, 4, we use a utility-first approach.
+  'both' ensures the element stays invisible until its delay hits.
+*/
+.animate-premium {
+  animation: premiumReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.18s; } /* Use non-linear intervals for a more organic feel */
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.28s; }

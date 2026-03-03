@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { scanDetail } from "../data/mockData";
 import { ThemeContext } from "../context/ThemeContext";
+import { ScanDetailSkeleton } from "../components/SkeletonLoader";
 import {
   Sun, Moon, Menu, House,
   Activity, RotateCcw, Minus
@@ -21,7 +22,17 @@ const ScanDetail = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Activity Log");
   const [toast, setToast] = useState(null);
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+      // Welcome popup show karo sirf jab loading complete ho
+      setShowWelcome(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -89,210 +100,211 @@ const ScanDetail = () => {
           </div>
         </header>
 
-        <div className="p-4 lg:p-6 space-y-4">
+        {/* Skeleton OR Real Content */}
+        {loading ? (
+          <ScanDetailSkeleton />
+        ) : (
+          <div className="p-4 lg:p-6 space-y-4 page-enter">
 
-          {/* Progress + Steps Card */}
-          <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl p-6">
-            <div className="flex flex-col lg:flex-row gap-6">
+            {/* Progress + Steps Card */}
+            <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl p-6 animate-fade-in-1">
+              <div className="flex flex-col lg:flex-row gap-6">
 
-              {/* Circular Progress */}
-              <div className="flex-shrink-0 flex items-center justify-center">
-                <div className="relative w-28 h-28">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="42" fill="none"
-                      stroke={dark ? "#1f2937" : "#e5e7eb"} strokeWidth="8" />
-                    <circle cx="50" cy="50" r="42" fill="none"
-                      stroke="#0CC8A8" strokeWidth="8"
-                      strokeDasharray={`${2 * Math.PI * 42}`}
-                      strokeDashoffset={`${2 * Math.PI * 42 * (1 - 0 / 100)}`}
-                      strokeLinecap="round" />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-bold dark:text-white">0%</span>
-                    <span className="text-xs text-gray-500">In Progress</span>
+                {/* Circular Progress */}
+                <div className="flex-shrink-0 flex items-center justify-center">
+                  <div className="relative w-28 h-28">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="42" fill="none"
+                        stroke={dark ? "#1f2937" : "#e5e7eb"} strokeWidth="8" />
+                      <circle cx="50" cy="50" r="42" fill="none"
+                        stroke="#0CC8A8" strokeWidth="8"
+                        strokeDasharray={`${2 * Math.PI * 42}`}
+                        strokeDashoffset={`${2 * Math.PI * 42 * (1 - 0 / 100)}`}
+                        strokeLinecap="round" />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-2xl font-bold dark:text-white">0%</span>
+                      <span className="text-xs text-gray-500">In Progress</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Steps + Meta */}
-              <div className="flex-1">
-                {/* Step Tracker */}
-                <div className="flex items-center gap-0 mb-6 overflow-x-auto pb-1">
-                  {scanDetail.steps.map((step, i) => (
-                    <div key={step.label} className="flex items-center">
-                      <div className="flex flex-col items-center gap-1 min-w-[80px]">
-                        <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition
-                          ${step.active
-                            ? "border-teal-500 bg-teal-500 text-white"
-                            : "border-gray-300 dark:border-gray-600 text-gray-400"}`}>
-                          <Activity size={14} />
+                {/* Steps + Meta */}
+                <div className="flex-1">
+                  {/* Step Tracker */}
+                  <div className="flex items-center gap-0 mb-6 overflow-x-auto pb-1">
+                    {scanDetail.steps.map((step, i) => (
+                      <div key={step.label} className="flex items-center">
+                        <div className="flex flex-col items-center gap-1 min-w-[80px]">
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition
+                            ${step.active
+                              ? "border-teal-500 bg-teal-500 text-white"
+                              : "border-gray-300 dark:border-gray-600 text-gray-400"}`}>
+                            <Activity size={14} />
+                          </div>
+                          <span className={`text-xs font-medium whitespace-nowrap
+                            ${step.active ? "text-teal-500" : "text-gray-400 dark:text-gray-500"}`}>
+                            {step.label}
+                          </span>
                         </div>
-                        <span className={`text-xs font-medium whitespace-nowrap
-                          ${step.active ? "text-teal-500" : "text-gray-400 dark:text-gray-500"}`}>
-                          {step.label}
-                        </span>
+                        {i < scanDetail.steps.length - 1 && (
+                          <div className={`h-0.5 w-8 mb-4 flex-shrink-0
+                            ${step.active ? "bg-teal-500" : "bg-gray-200 dark:bg-gray-700"}`} />
+                        )}
                       </div>
-                      {i < scanDetail.steps.length - 1 && (
-                        <div className={`h-0.5 w-8 mb-4 flex-shrink-0
-                          ${step.active ? "bg-teal-500" : "bg-gray-200 dark:bg-gray-700"}`} />
-                      )}
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
 
-                {/* Metadata Row */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
-                  {[
-                    { label: "Scan Type", value: scanDetail.meta.scanType },
-                    { label: "Targets", value: scanDetail.meta.targets },
-                    { label: "Started At", value: scanDetail.meta.startedAt },
-                    { label: "Credentials", value: scanDetail.meta.credentials },
-                    { label: "Files", value: scanDetail.meta.files },
-                    { label: "Checklists", value: scanDetail.meta.checklists, teal: true },
-                  ].map((m) => (
-                    <div key={m.label}>
-                      <p className="text-gray-400 text-xs mb-1">{m.label}</p>
-                      <p className={`font-semibold text-sm ${m.teal ? "text-teal-500" : "dark:text-white text-gray-800"}`}>
-                        {m.value}
-                      </p>
-                    </div>
-                  ))}
+                  {/* Metadata Row */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+                    {[
+                      { label: "Scan Type", value: scanDetail.meta.scanType },
+                      { label: "Targets", value: scanDetail.meta.targets },
+                      { label: "Started At", value: scanDetail.meta.startedAt },
+                      { label: "Credentials", value: scanDetail.meta.credentials },
+                      { label: "Files", value: scanDetail.meta.files },
+                      { label: "Checklists", value: scanDetail.meta.checklists, teal: true },
+                    ].map((m) => (
+                      <div key={m.label}>
+                        <p className="text-gray-400 text-xs mb-1">{m.label}</p>
+                        <p className={`font-semibold text-sm ${m.teal ? "text-teal-500" : "dark:text-white text-gray-800"}`}>
+                          {m.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Console + Findings */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Console + Findings */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-fade-in-2">
 
-            {/* Live Scan Console */}
-            <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-teal-400 rounded-full animate-pulse" />
-                  <span className="text-sm font-semibold dark:text-white">Live Scan Console</span>
+              {/* Live Scan Console */}
+              <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-teal-400 rounded-full animate-pulse" />
+                    <span className="text-sm font-semibold dark:text-white">Live Scan Console</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full flex items-center gap-1">
+                      <RotateCcw size={10} className="animate-spin" /> Running...
+                    </span>
+                    <button className="text-gray-400 hover:text-gray-600">
+                      <Minus size={14} />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full flex items-center gap-1">
-                    <RotateCcw size={10} className="animate-spin" /> Running...
-                  </span>
-                  <button className="text-gray-400 hover:text-gray-600">
-                    <Minus size={14} />
-                  </button>
+
+                <div className="flex border-b border-gray-200 dark:border-gray-800 px-4">
+                  {["Activity Log", "Verification Loops"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`py-2.5 px-1 mr-4 text-sm font-medium border-b-2 transition
+                        ${activeTab === tab
+                          ? "border-teal-500 text-teal-500"
+                          : "border-transparent text-gray-400 hover:text-gray-600"}`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="p-4 font-mono text-xs overflow-y-auto max-h-[380px] custom-scrollbar space-y-3 bg-white dark:bg-[#141414]">
+                  {activeTab === "Activity Log" ? (
+                    scanDetail.logs.map((log, i) => (
+                      <div key={i} className="leading-relaxed dark:text-gray-300 text-gray-700">
+                        <span className="text-gray-400">[{log.time}]</span>{" "}
+                        {log.message}{" "}
+                        {log.highlight && <span className="text-teal-400">{log.highlight}</span>}
+                        {log.suffix && <span>{log.suffix}</span>}
+                        {log.path && (
+                          <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded text-[10px] ml-1">
+                            {log.path}
+                          </span>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 text-center py-8">
+                      No verification loops running
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <div className="flex border-b border-gray-200 dark:border-gray-800 px-4">
-                {["Activity Log", "Verification Loops"].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`py-2.5 px-1 mr-4 text-sm font-medium border-b-2 transition
-                      ${activeTab === tab
-                        ? "border-teal-500 text-teal-500"
-                        : "border-transparent text-gray-400 hover:text-gray-600"}`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-
-              <div className="p-4 font-mono text-xs overflow-y-auto max-h-[380px] custom-scrollbar space-y-3 bg-white dark:bg-[#141414]">
-                {activeTab === "Activity Log" ? (
-                  scanDetail.logs.map((log, i) => (
-                    <div key={i} className="leading-relaxed dark:text-gray-300 text-gray-700">
-                      <span className="text-gray-400">[{log.time}]</span>{" "}
-                      {log.message}{" "}
-                      {log.highlight && <span className="text-teal-400">{log.highlight}</span>}
-                      {log.suffix && <span>{log.suffix}</span>}
-                      {log.path && (
-                        <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded text-[10px] ml-1">
-                          {log.path}
+              {/* Finding Log */}
+              <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+                  <h3 className="text-sm font-semibold dark:text-white">Finding Log</h3>
+                </div>
+                <div className="p-4 space-y-3 overflow-y-auto max-h-[420px] custom-scrollbar">
+                  {scanDetail.findings.map((f, i) => (
+                    <div key={i} className="border border-gray-100 dark:border-gray-800 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 transition">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`${severityColors[f.severity]} text-white text-xs font-bold px-2.5 py-1 rounded-full`}>
+                          {f.severity}
                         </span>
-                      )}
+                        <span className="text-xs text-gray-400">{f.time}</span>
+                      </div>
+                      <p className="text-sm font-semibold dark:text-white text-gray-900 mb-1">{f.title}</p>
+                      <p className="text-xs text-teal-500 font-mono mb-2">{f.endpoint}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{f.description}</p>
                     </div>
-                  ))
-                ) : (
-                  <div className="text-gray-400 text-center py-8">
-                    No verification loops running
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Finding Log */}
-            <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800">
-                <h3 className="text-sm font-semibold dark:text-white">Finding Log</h3>
-              </div>
-              <div className="p-4 space-y-3 overflow-y-auto max-h-[420px] custom-scrollbar">
-                {scanDetail.findings.map((f, i) => (
-                  <div key={i} className="border border-gray-100 dark:border-gray-800 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 transition">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`${severityColors[f.severity]} text-white text-xs font-bold px-2.5 py-1 rounded-full`}>
-                        {f.severity}
-                      </span>
-                      <span className="text-xs text-gray-400">{f.time}</span>
-                    </div>
-                    <p className="text-sm font-semibold dark:text-white text-gray-900 mb-1">{f.title}</p>
-                    <p className="text-xs text-teal-500 font-mono mb-2">{f.endpoint}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{f.description}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Status Bar */}
-        <div className="sticky bottom-0 bg-white dark:bg-[#141414] border-t border-gray-200 dark:border-gray-800 px-6 py-2.5 flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-          <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
-            Sub-agents: <strong className="dark:text-white text-gray-700 ml-1">0</strong>
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
-            Parallel Executions: <strong className="dark:text-white text-gray-700 ml-1">2</strong>
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
-            Operations: <strong className="dark:text-white text-gray-700 ml-1">1</strong>
-          </span>
-          <span className="ml-auto flex items-center gap-3">
-            <span className="text-red-500">Critical: <strong>0</strong></span>
-            <span className="text-orange-500">High: <strong>0</strong></span>
-            <span className="text-yellow-500">Medium: <strong>0</strong></span>
-            <span className="text-green-500">Low: <strong>0</strong></span>
-          </span>
-        </div>
+        {!loading && (
+          <div className="sticky bottom-0 bg-white dark:bg-[#141414] border-t border-gray-200 dark:border-gray-800 px-6 py-2.5 flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400 animate-fade-in-3">
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
+              Sub-agents: <strong className="dark:text-white text-gray-700 ml-1">0</strong>
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
+              Parallel Executions: <strong className="dark:text-white text-gray-700 ml-1">2</strong>
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
+              Operations: <strong className="dark:text-white text-gray-700 ml-1">1</strong>
+            </span>
+            <span className="ml-auto flex items-center gap-3">
+              <span className="text-red-500">Critical: <strong>0</strong></span>
+              <span className="text-orange-500">High: <strong>0</strong></span>
+              <span className="text-yellow-500">Medium: <strong>0</strong></span>
+              <span className="text-green-500">Low: <strong>0</strong></span>
+            </span>
+          </div>
+        )}
       </main>
 
-      {/* Welcome Popup */}
+      {/* Welcome Popup - sirf loading ke baad */}
       {showWelcome && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl w-full max-w-md p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl w-full max-w-md p-6 border border-gray-200 dark:border-gray-700 page-enter">
 
-            {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 bg-teal-400 rounded-full animate-pulse" />
-                <h2 className="text-lg font-bold dark:text-white text-gray-900">
-                  Scan Started 🚀
-                </h2>
+                <h2 className="text-lg font-bold dark:text-white text-gray-900">Scan Started 🚀</h2>
               </div>
               <button
                 onClick={() => setShowWelcome(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition text-lg leading-none"
-              >
-                ✕
-              </button>
+              >✕</button>
             </div>
 
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
               Your scan is now running. Here's what you can do on this page:
             </p>
 
-            {/* Instructions */}
             <div className="space-y-2.5 mb-6">
               {[
                 { icon: "", title: "Track Progress", desc: "Circular progress shows scan completion in real-time" },
@@ -311,13 +323,12 @@ const ScanDetail = () => {
               ))}
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-3">
               <button
                 onClick={() => setShowWelcome(false)}
                 className="flex-1 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-xl text-sm font-semibold transition hover:shadow-[0_0_20px_rgba(12,200,168,0.3)]"
               >
-                Got it, Let's Go! 
+                Got it, Let's Go! 🎯
               </button>
               <button
                 onClick={() => setShowWelcome(false)}
