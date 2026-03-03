@@ -38,7 +38,6 @@ const Dashboard = () => {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#0F0F0F] font-sans">
 
-      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-20 lg:hidden"
@@ -54,7 +53,6 @@ const Dashboard = () => {
 
       <main className="flex-1 overflow-auto min-w-0">
 
-        {/* Top Header */}
         <header className="flex justify-between items-center px-4 lg:px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0F0F0F] sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <button
@@ -96,13 +94,11 @@ const Dashboard = () => {
           </div>
         </header>
 
-        {/* Skeleton OR Real Content */}
         {loading ? (
           <DashboardSkeleton />
         ) : (
           <div className="p-4 lg:p-6 space-y-4 page-enter">
 
-            {/* Org Stats Bar */}
             <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl px-4 lg:px-6 py-4 animate-fade-in-1">
               <div className="overflow-x-auto pb-2 mb-4">
                 <div className="flex items-center justify-between text-sm dark:text-gray-300 min-w-max w-full gap-2">
@@ -131,10 +127,8 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Scan Table */}
             <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden animate-fade-in-2">
 
-              {/* Toolbar */}
               <div className="p-4 flex flex-wrap items-center gap-3 border-b border-gray-200 dark:border-gray-800">
                 <div className="relative flex-1 min-w-[160px]">
                   <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -171,7 +165,6 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* Table */}
               <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-420px)] custom-scrollbar">
                 <table className="w-full text-left text-sm min-w-[640px]">
                   <thead className="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
@@ -228,7 +221,6 @@ const Dashboard = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
               <div className="px-4 py-3 flex items-center justify-between border-t border-gray-100 dark:border-gray-800">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   Showing {filteredScans.length} of 100 Scans
@@ -243,7 +235,6 @@ const Dashboard = () => {
         )}
       </main>
 
-      {/* Toast */}
       {toast && (
         <div className="fixed bottom-6 right-6 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium z-50 flex items-center gap-2">
           <span className="w-2 h-2 bg-teal-400 rounded-full" />

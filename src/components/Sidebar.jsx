@@ -68,14 +68,12 @@ const Sidebar = ({ onClose }) => {
         ))}
       </nav>
 
-      {/* Bottom nav */}
       <div className="space-y-1 mb-4">
         {bottomItems.map((item) => (
           <NavItem key={item.label} item={item} />
         ))}
       </div>
 
-      {/* User profile */}
       <div className="border-t border-gray-200 dark:border-gray-800 pt-4 px-2 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl p-2 transition">
         <div className="w-9 h-9 rounded-full bg-yellow-400 flex-shrink-0 overflow-hidden">
           <img

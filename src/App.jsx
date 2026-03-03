@@ -14,7 +14,6 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/scan/:id" element={<ScanDetail />} />
 
-          {/* Sidebar ke baaki routes */}
           <Route path="/scans" element={<Dashboard />} />
           <Route path="/projects" element={<Dashboard />} />
           <Route path="/schedule" element={<Dashboard />} />
@@ -22,7 +21,6 @@ const App = () => {
           <Route path="/settings" element={<Dashboard />} />
           <Route path="/support" element={<Dashboard />} />
 
-          {/* Koi bhi unknown route → dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
