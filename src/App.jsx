@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from './pages/Login.jsx';
 import Dashboard from './pages/Dashboard.jsx';
-import ScanTable from './components/ScanTable.jsx';
+import ScanDetail from './pages/ScanDetail.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';
 
 const App = () => {
@@ -10,15 +10,24 @@ const App = () => {
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
-          {/* Default route */}
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/scans" element={<ScanTable />} />
+          <Route path="/scan/:id" element={<ScanDetail />} />
 
+          {/* Sidebar ke baaki routes */}
+          <Route path="/scans" element={<Dashboard />} />
+          <Route path="/projects" element={<Dashboard />} />
+          <Route path="/schedule" element={<Dashboard />} />
+          <Route path="/notifications" element={<Dashboard />} />
+          <Route path="/settings" element={<Dashboard />} />
+          <Route path="/support" element={<Dashboard />} />
+
+          {/* Koi bhi unknown route → dashboard */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
   )
 }
 
-export default App
+export default App;
