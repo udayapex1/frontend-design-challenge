@@ -5,7 +5,17 @@ import StatusChip from "../components/StatusChip";
 import { stats, scans } from "../data/mockData";
 import { ThemeContext } from "../context/ThemeContext.jsx";
 import { useNavigate } from "react-router-dom";
-import { Search, SlidersHorizontal, Columns2, Plus, RefreshCw, Sun, Moon, Menu } from "lucide-react";
+import {
+  Search,
+  SlidersHorizontal,
+  Columns2,
+  Plus,
+  RefreshCw,
+  Sun,
+  Moon,
+  Menu,
+  House,
+} from "lucide-react";
 
 const Dashboard = () => {
   const { dark, toggle } = useContext(ThemeContext);
@@ -17,7 +27,7 @@ const Dashboard = () => {
   const filteredScans = scans.filter(
     (s) =>
       s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.type.toLowerCase().includes(search.toLowerCase())
+      s.type.toLowerCase().includes(search.toLowerCase()),
   );
 
   const showToast = (msg) => {
@@ -27,7 +37,6 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#0F0F0F] font-sans">
-
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
@@ -37,15 +46,16 @@ const Dashboard = () => {
       )}
 
       {/* Sidebar - hidden on mobile, slides in when open */}
-      <div className={`
+      <div
+        className={`
         fixed lg:static inset-y-0 left-0 z-30 transform transition-transform duration-300
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-      `}>
+      `}
+      >
         <Sidebar onClose={() => setSidebarOpen(false)} />
       </div>
 
       <main className="flex-1 overflow-auto min-w-0">
-
         {/* Top Header */}
         <header className="flex justify-between items-center px-4 lg:px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0F0F0F] sticky top-0 z-10">
           <div className="flex items-center gap-3">
@@ -59,7 +69,7 @@ const Dashboard = () => {
             {/* Breadcrumb - hidden on small mobile */}
             <div className="hidden sm:flex text-sm text-gray-500 dark:text-gray-400 items-center gap-1">
               <span>Scan</span>
-              <span className="mx-1">⌂</span>
+              <House size={14} className="mx-1 inline-block align-middle" />
               <span>/</span>
               <span className="mx-1">Private Assets</span>
               <span>/</span>
@@ -94,47 +104,48 @@ const Dashboard = () => {
         </header>
 
         <div className="p-4 lg:p-6 space-y-4">
-
           {/* Org Stats Bar */}
-          <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl px-4 lg:px-6 py-4">
+         <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl px-4 lg:px-6 py-4">
+  
+  {/* Org info - equal space between items */}
+  <div className="overflow-x-auto pb-2 mb-4">
+    <div className="flex items-center justify-between text-sm dark:text-gray-300 min-w-max w-full gap-2">
+      <span>Org: <strong className="text-black dark:text-white">Project X</strong></span>
+      <span className="text-gray-300 dark:text-gray-600">|</span>
+      <span>Owner: <strong className="text-black dark:text-white">Nammagiri</strong></span>
+      <span className="text-gray-300 dark:text-gray-600">|</span>
+      <span>Total Scans: <strong className="texst-black dark:text-white">100</strong></span>
+      <span className="text-gray-300 dark:text-gray-600">|</span>
+      <span>Scheduled: <strong className="text-black dark:text-white">1000</strong></span>
+      <span className="text-gray-300 dark:text-gray-600">|</span>
+      <span>Rescans: <strong className="text-black dark:text-white">100</strong></span>
+      <span className="text-gray-300 dark:text-gray-600">|</span>
+      <span>Failed Scans: <strong className="text-black dark:text-white">100</strong></span>
+      <span className="text-gray-300 dark:text-gray-600">|</span>
+      <span className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+        <RefreshCw size={13} className="text-teal-500" />
+        10 mins ago
+      </span>
+    </div>
+  </div>
 
-            {/* Org info - scrollable on mobile */}
-            <div className="overflow-x-auto pb-2 mb-4">
-              <div className="flex items-center gap-3 text-sm dark:text-gray-300 min-w-max">
-                <span>Org: <strong className="text-black dark:text-white">Project X</strong></span>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <span>Owner: <strong className="text-black dark:text-white">Nammagiri</strong></span>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <span>Total Scans: <strong className="text-black dark:text-white">100</strong></span>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <span>Scheduled: <strong className="text-black dark:text-white">1000</strong></span>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <span>Rescans: <strong className="text-black dark:text-white">100</strong></span>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <span>Failed Scans: <strong className="text-black dark:text-white">100</strong></span>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <span className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
-                  <RefreshCw size={13} className="text-teal-500" />
-                  10 mins ago
-                </span>
-              </div>
-            </div>
-
-            {/* Severity Cards - 2 cols on mobile, 4 on desktop */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {stats.severities.map((item) => (
-                <SeverityCard key={item.label} {...item} />
-              ))}
-            </div>
-          </div>
+  {/* Severity Cards */}
+  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    {stats.severities.map((item) => (
+      <SeverityCard key={item.label} {...item} />
+    ))}
+  </div>
+</div>
 
           {/* Scan Table */}
           <div className="bg-white dark:bg-[#141414] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
-
             {/* Toolbar */}
             <div className="p-4 flex flex-wrap items-center gap-3 border-b border-gray-200 dark:border-gray-800">
               <div className="relative flex-1 min-w-[160px]">
-                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search
+                  size={15}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                />
                 <input
                   type="text"
                   value={search}
@@ -178,7 +189,9 @@ const Dashboard = () => {
                     <th className="px-4 py-3 font-medium">Status</th>
                     <th className="px-4 py-3 font-medium">Progress</th>
                     <th className="px-4 py-3 font-medium">Vulnerability</th>
-                    <th className="px-4 py-3 font-medium text-right">Last Scan</th>
+                    <th className="px-4 py-3 font-medium text-right">
+                      Last Scan
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -214,9 +227,18 @@ const Dashboard = () => {
                         <div className="flex gap-1">
                           {[
                             { val: scan.vulnerabilities[0], bg: "bg-red-500" },
-                            { val: scan.vulnerabilities[1], bg: "bg-orange-500" },
-                            { val: scan.vulnerabilities[2], bg: "bg-yellow-500" },
-                            { val: scan.vulnerabilities[3], bg: "bg-green-500" },
+                            {
+                              val: scan.vulnerabilities[1],
+                              bg: "bg-orange-500",
+                            },
+                            {
+                              val: scan.vulnerabilities[2],
+                              bg: "bg-yellow-500",
+                            },
+                            {
+                              val: scan.vulnerabilities[3],
+                              bg: "bg-green-500",
+                            },
                           ].map((v, i) =>
                             v.val != null ? (
                               <span
@@ -225,7 +247,7 @@ const Dashboard = () => {
                               >
                                 {v.val}
                               </span>
-                            ) : null
+                            ) : null,
                           )}
                         </div>
                       </td>
@@ -244,8 +266,12 @@ const Dashboard = () => {
                 Showing {filteredScans.length} of 100 Scans
               </span>
               <div className="flex gap-2">
-                <button className="w-8 h-8 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition">‹</button>
-                <button className="w-8 h-8 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition">›</button>
+                <button className="w-8 h-8 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                  ‹
+                </button>
+                <button className="w-8 h-8 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                  ›
+                </button>
               </div>
             </div>
           </div>
