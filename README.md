@@ -1,115 +1,132 @@
-# Frontend Design Challenge
+# Frontend Design Challenge  
 
-This repository contains a small React application built with Vite and Tailwind CSS. It was created as part of a design challenge: the goal was to deliver a polished dashboard interface for a fictional cybersecurity scanning product.
+This project is a small React dashboard application I built as part of a frontend design challenge. The goal was to create a clean, polished UI for a fictional cybersecurity scanning product.
 
-The focus isn’t on backend functionality––all data is mocked––but the UI includes a realistic login experience, a responsive dashboard with light/dark theming, and a detailed scan view to demonstrate component reuse, state management, and layout techniques.
-
----
-
-## 🚀 Tech stack
-
-- **React 19** with hooks and context
-- **Vite** as the build tool (fast HMR, ES modules)
-- **Tailwind CSS 3** for utility‑first styling
-- **React Router v6** for client‑side navigation
-- **Lucide & react-icons** for vector icons
-- Plain JavaScript (no TypeScript) – keep it lightweight
+There’s no backend connected — all the data is mocked — but the interface is designed to feel realistic and production-ready. It includes a proper login screen, a responsive dashboard layout, dark/light theme support, and a detailed scan view to demonstrate component reuse, layout structuring, and state management.
 
 ---
 
-## 📁 Project structure
+##  Tech Stack  
 
-```
+- **React 19** (hooks + context API)  
+- **Vite** for fast development and HMR  
+- **Tailwind CSS v3** for utility-first styling  
+- **React Router v6** for navigation  
+- **Lucide & react-icons** for icons  
+- Plain **JavaScript** (no TypeScript — intentionally lightweight)  
+
+---
+
+##  Project Structure  
+
+```bash
 src/
 ├─ assets/          # static files (logo, svg, etc)
-├─ components/      # reusable UI bits (Sidebar, ScanTable, cards…)
+├─ components/      # reusable UI components (Sidebar, ScanTable, cards…)
 ├─ context/         # theme provider
-├─ data/            # mocks used by pages
-├─ pages/           # entry points (Login, Dashboard, ScanDetail)
+├─ data/            # mocked data for pages
+├─ pages/           # page-level components (Login, Dashboard, ScanDetail)
 ├─ index.css        # Tailwind entrypoint
-├─ main.jsx         # application bootstrap
+├─ main.jsx         # app bootstrap
 └─ App.jsx          # router + theme wrapper
 ```
 
-The Tailwind config (`tailwind.config.js`) uses `darkMode: 'class'` and scans the `src` folder and `index.html` for class names. PostCSS is configured via `postcss.config.cjs`.
+Tailwind is configured with `darkMode: 'class'` and scans the `src` folder and `index.html` for class names.  
+PostCSS is configured via `postcss.config.cjs`.
 
 ---
 
-## 🛠 Getting started
+##  Getting Started  
 
 ```bash
-# clone the repo
+# Clone the repository
 git clone <repo-url> frontend-design-challenge
 cd frontend-design-challenge
 
-# install dependencies
+# Install dependencies
 npm install
 
-# start development server
+# Start development server
 npm run dev
 
-# build for production
+# Build for production
 npm run build
-npm run preview    # serve the built output
+
+# Preview production build
+npm run preview
 ```
 
-Tailwind and Vite both require the dev server to be restarted when you modify their configuration files.
+> Note: If you modify Tailwind or Vite configuration files, restart the dev server.
 
 ---
 
-## ✨ Features
+##  Features  
 
-- **Login page** with animated background blobs, email/password form, and social buttons
-- **Dashboard**
-  - Responsive sidebar that collapses on mobile
-  - Search/filter toolbar, export/scan actions (mocked toasts)
-  - Stats overview and severity cards
-  - Scan table component with progress bars and color‑coded badges
-  - Dark/light theme toggle persisted in localStorage
-- **Scan detail view**
-  - Skeleton loading state
-  - Step progress tracker, metadata grid, live console & findings log
-  - Sticky header and status bar for consistent UX
-- **Theme context** managing `dark` mode class on `<html>` and syncing with system pref
+###  Login Page  
+- Animated background blobs  
+- Email/password form UI  
+- Social login buttons (UI only)  
+- Smooth transitions and subtle animations  
 
-All data comes from `src/data/mockData.js` so you can easily tweak it while iterating on the UI.
+###  Dashboard  
+- Responsive sidebar (collapses on mobile)  
+- Search & filter toolbar  
+- Mocked export/scan actions  
+- Overview stats cards  
+- Severity-based color coding  
+- Scan table with progress bars and badges  
+- Dark/light theme toggle (persisted in `localStorage`)  
 
----
-
-## 🧩 Styling notes
-
-- Tailwind is used exclusively; there’s no extra CSS except the `index.css` imports.
-- Colors are extended (e.g. custom teal) via the config, and utility classes like `dark:bg-[#141414]` are scattered throughout.
-- A few simple animations (`animate-fade-in-*`) are defined inline in components for page transitions.
-
----
-
-## 📌 Developer pointers
-
-- The `ThemeContext` in `src/context/ThemeContext.jsx` handles theme toggling and persistence.
-- `ScanTable.jsx` is a drop‑in component used by the dashboard; it uses the `scans` mock and applies click handlers for navigation.
-- The mock dataset includes both overview stats and detailed scan logs; altering the shape there updates the UI automatically.
-- When adding new pages, update `App.jsx`’s router accordingly and ensure the sidebar contains the link.
+###  Scan Detail View  
+- Skeleton loading state  
+- Step progress tracker  
+- Metadata grid  
+- Live console + findings log  
+- Sticky header and status bar  
 
 ---
 
-## 📦 Dependencies
+##  Styling Notes  
 
-See `package.json` for the full list, but the key packages are:
-
-- `react`, `react-dom`
-- `vite`, `@vitejs/plugin-react`
-- `tailwindcss`, `autoprefixer`
-- `react-router-dom`, `lucide-react`, `react-icons`
-
-Run `npm audit` if you want to check for vulnerabilities.
+- Tailwind CSS is used almost exclusively.  
+- No additional CSS except the `index.css` Tailwind imports.  
+- Custom colors (e.g., teal) extended via `tailwind.config.js`.  
+- Dark mode handled using `dark:` utility classes.  
+- Simple inline animations for page transitions.  
 
 ---
 
-## 📝 License
+##  Theme Handling  
 
-This code is provided as-is for educational/demo purposes. Feel free to fork, tweak, and learn from it.
+The `ThemeContext` (`src/context/ThemeContext.jsx`) handles:  
+
+- Toggling the `dark` class on `<html>`  
+- Persisting theme preference in `localStorage`  
+- Syncing with system preference on initial load  
 
 ---
 
-Happy hacking! 🎯
+##  Core Dependencies  
+
+Main packages used:
+
+- `react`, `react-dom`  
+- `vite`, `@vitejs/plugin-react`  
+- `tailwindcss`, `autoprefixer`  
+- `react-router-dom`  
+- `lucide-react`, `react-icons`  
+
+You can run:
+
+```bash
+npm audit
+```
+
+to check for vulnerabilities.
+
+---
+
+## Notes  
+
+This project focuses purely on frontend architecture, UI polish, and component-driven design.  
+All data lives in `src/data/mockData.js` and can be modified easily for experimentation.
